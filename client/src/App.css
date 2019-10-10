@@ -1,0 +1,234 @@
+.ant-layout-sider {
+    background: red !important;
+}
+.hide {
+    display: none !important;
+}
+.bms_padder {
+    margin-top: 16px;
+    padding-top: 2rem;
+}
+.bms_trigger {
+    font-size: 18px;
+    line-height: 64px;
+    padding: 0 24px;
+    cursor: pointer;
+    transition: color .3s;
+}
+
+.bms_trigger:hover {
+    color: #1890ff;
+}
+
+.bms_logo {
+    background: rgba(255,255,255,.08);
+    margin: 16px;
+}
+
+.bms_clickable {
+    cursor: pointer;
+}
+
+.ant-btn { margin: 5px;}
+.bms_logo {
+
+    text-align: center;
+}
+.bms_logo h3 {
+    color: #ffffff;
+    padding: 10px;
+
+}
+.bms_price {
+    width: 150px;
+    height: 150px;
+    background-color: #32A350;
+    padding: 20px;
+    color: #fff;
+    font-size: 2em;
+    border-radius: 50%;
+    padding-top: 50px;
+    text-align: center;
+    margin: 15px auto;
+}
+.bms_loading_icon {
+
+    font-size: 3em;
+    text-align: center;
+
+}
+.bms_pageHeader {
+    font-size: 1.3em;
+    font-weight: 500;
+    padding-left: 1rem;
+}
+.bms_trigger {
+    font-size: 1.4em;
+}
+
+.bms_service_block {
+    padding-left: 30px;
+    position: relative;
+}
+.bms_service_item {
+    margin: 5px 0;
+}
+.bms_service_item a {
+    color: inherit;
+}
+.bms_service_block .bms_service_icon {
+    position: absolute;
+    left: 0px;
+    font-size: 1.5em;
+}
+.anticon {
+    vertical-align: 0em !important;
+}
+.breadcrumbChild
+{
+    color: #1890ff;
+}
+.chat {
+
+    display: table-cell;
+    vertical-align: bottom;
+    width: 600px;
+    height: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.chatSystem {
+    padding: 20px 30px;
+    background-color: #ccc;
+    float: left;
+    border-radius: 15px;
+    clear: both;
+    margin: 15px 0;
+}
+.chatUser {
+    padding: 20px 30px;
+    background-color: #1890ff;
+    float: right;
+    color: #fff;
+    border-radius: 15px;
+    clear: both;
+    margin: 15px 0;
+}
+
+.datePickerDiv {
+    width: 100%;
+    text-align: right;
+}
+
+.datePicker {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    z-index: 15;
+    border: 1px #ccc solid;
+}
+.deviceNumber {
+    font-size: 34px;
+    font-weight: bold;
+    text-align: center;
+    margin: 10px 0 0 0;
+    letter-spacing: -2px;
+    color: #212528;
+}
+.devicePercentage {
+    font-size: 16px;
+    text-align: center;
+    margin: 0 0 10px 0;
+    color: #212528;
+}
+
+.sitePickerDiv {
+    width: 100%;
+    text-align: left;
+}
+
+/****************************************/
+/** Styles for change header container **/
+/****************************************/
+
+.bms-content-header-parent {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    padding-left: 40px
+}
+
+.ant-layout .ant-layout-content {
+    background: none;
+}
+
+/*******************************************/
+/** Styling for the Services section - KR **/
+/*******************************************/
+
+.bms_price {
+    width: 150px;
+    height: 150px;
+    background-color: #32A350;
+    padding: 20px;
+    color: #fff;
+    font-size: 2em;
+    border-radius: 50%;
+    padding-top: 50px;
+    text-align: center;
+    margin: 15px auto;
+}
+.bms_loading_icon {
+
+    font-size: 3em;
+    text-align: center;
+
+}
+.bms_pageHeader {
+    font-size: 1.3em;
+    font-weight: 500;
+    padding-left: 1rem;
+}
+.bms_trigger {
+    font-size: 1.4em;
+}
+
+.bms_service_block {
+    padding-left: 30px;
+    position: relative;
+}
+.bms_service_item {
+    margin: 5px 0;
+}
+.bms_service_item a {
+    color: inherit;
+}
+.bms_service_block .bms_service_icon {
+    position: absolute;
+    left: 0px;
+    font-size: 1.5em;
+}
+.anticon {
+    vertical-align: 0em !important;
+}
+.priceItem span {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+.priceBlock {
+    margin: 0 -20px;
+    margin-bottom: -20px;
+    background-color: #1890FF;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 15px;
+    color: #ffffff;
+}
+.priceItem {
+    margin: 5px 0 15px 0;
+}
+.priceDescription {
+    font-size: 14px;
+    margin: 5px 0 30px 0;
+}
