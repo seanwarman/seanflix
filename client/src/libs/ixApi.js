@@ -31,7 +31,7 @@ export default {
       });
     } catch (error) {
       console.log('There was an error in the create api method: ', error);
-      return error;
+      return null;
     }
     return response.data.body;
   },

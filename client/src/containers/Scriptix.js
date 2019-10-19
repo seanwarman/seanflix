@@ -51,24 +51,23 @@ export default class Scriptix extends Component {
     this.setState({ saving: true });
     let stateCopy = { ...this.state };
     let result;
-    try {
-      result = await API.create('/scriptix/create', [stateCopy.form]);
-    } catch (e) {
-      throw e;
+    result = await API.create('/scriptix/create', [stateCopy.form]);
+    if(!result) {
+      message.error('The passage failed to save');
+    } else {
+      message.success('Passage Saved');
     }
-    console.log('result: ', result);
-    let stateResult = await this.loadDataAndSetState();
-    if(stateResult === 'success') message.success('Passage Saved');
-    if(stateResult === 'failed') message.error('The passage failed to save');
+    this.loadDataAndSetState();
   }
+
   validateForm = () => {
     let stateCopy = { ...this.state };
     let disabled = false;
-    for (let key in stateCopy.form) {
-      if((stateCopy.form[key] || '').length < 1) {
-        disabled = true;
-      }
-    }
+    // for (let key in stateCopy.form) {
+    //   if((stateCopy.form[key] || '').length < 1) {
+    //     disabled = true;
+    //   }
+    // }
     return disabled;
   }
 

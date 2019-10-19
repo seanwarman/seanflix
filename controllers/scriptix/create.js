@@ -6,41 +6,40 @@ const uuid = require('uuid');
 module.exports = {
   async main(req, res) {
 
-    let client = new MongoClient(url, { useNewUrlParser: true });
-
     let error;
+    let client = new MongoClient(url, { useNewUrlParser: true });
 
     try {
       client = await client.connect();
     } catch (e) {
+      console.log('There was an error connecting to the database: ', e);
       error = e;
-      error.message = 'There was an error connecting to the database.';
     }
-
+    
     if(error) {
-      res.send({ body: error });
+      res.status(500).send();
     }
 
     const db = client.db(dbName);
     const collection = db.collection('scriptix');
 
     let result;
+    const data = req.body.data;
 
     try {
-      // insertMany expects and array of objects
-      result = await collection.insertMany(req.body.data);
+      result = await collection.insertOne(data);
     } catch (e) {
-      error = e
-      error.message = 'There was an error inserting to scriptix.';
+      console.log('There was an error inserting to the database: ', e);
+      error = e;
     }
     
     client.close();
 
     if(error) {
-      res.send({ body: error });
+      res.status(500).send();
     }
     
-    res.send({ body: result });
+    res.send({body: result});
 
   }
 }
