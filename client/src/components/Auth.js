@@ -13,7 +13,7 @@ export default class Auth extends Component {
     let result;
     
     try {
-      result = await API.post('/seanflix/auth', this.state.form.password);
+      result = await API.create('/seanflix/auth', this.state.form.password);
     } catch (err) {
       console.log('There was an error with the auth endpoint: ', err);
     }

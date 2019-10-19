@@ -43,15 +43,15 @@ class App extends Component {
   check = async key => {
     let result;
 
-    try {
-      result = await API.post('/seanflix/auth/check', key);
-    } catch (err) {
-      console.log('There was an error with the auth endpoint: ', err);
-      throw err;
-    }
+    result = await API.create('/seanflix/auth/check', key);
 
-    if(result.key) return result.key;
-    console.log('there was no key :(');
+    console.log('result: ', result);
+
+    if(result.key) {
+      return result.key;
+    }
+    console.log('there was no key :(', result.message);
+
     return null;
   }
 

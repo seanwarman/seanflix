@@ -22,6 +22,8 @@ export default class Seanflix extends Component {
     let stateCopy = { ...this.state };
 
     stateCopy.movieFiles = await this.getMovies();
+
+    console.log('Got the movies...?', stateCopy.movieFiles);
     // stateCopy.moviePics = await this.getMoviePics();
 
     // console.log('about to post');
@@ -36,12 +38,11 @@ export default class Seanflix extends Component {
     let result;
     let error;
     try {
-      result = await API.post('/seanflix/wiki/info', this.prettifyFileName(movies[0]));
+      result = await API.create('/seanflix/wiki/info', this.prettifyFileName(movies[0]));
     } catch (err) {
       console.log(err);
-      error = err;
+      return null;
     }
-    if(error) return error;
     return result;
   }
 
@@ -51,7 +52,9 @@ export default class Seanflix extends Component {
       result = await API.put('/seanflix/update');
     } catch (error) {
       console.log('There was an error updating the movie info: ', error);
+      return null
     }
+    return result;
   }
 
   getMovies = async() => {
@@ -60,8 +63,8 @@ export default class Seanflix extends Component {
       result = await API.get('/seanflix/list');
     } catch (err) {
       console.log(err);
+      return null;
     }
-    console.log('Movies: ', result);
     return result;
   }
 
@@ -87,7 +90,7 @@ export default class Seanflix extends Component {
     let stateCopy = { ...this.state };
     let result;
     try {
-      result = await API.post('/seanflix/create', stateCopy.form.magnet);
+      result = await API.create('/seanflix/create', stateCopy.form.magnet);
     } catch (err) {
       console.log('There was an error posting to seanflix/create ', err);
     }

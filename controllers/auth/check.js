@@ -3,6 +3,8 @@ const config = require('../../config');
 const key = '1234';
 module.exports = {
     main(req, res) {
+        console.log('Calling check');
+        console.log(req.body);
         const localStore = req.body.data;
         if(localStore === key) {
           //TODO create a new key store it somewhere and

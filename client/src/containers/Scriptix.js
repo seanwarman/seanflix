@@ -52,7 +52,7 @@ export default class Scriptix extends Component {
     let stateCopy = { ...this.state };
     let result;
     try {
-      result = await API.post('/scriptix/create', [stateCopy.form]);
+      result = await API.create('/scriptix/create', [stateCopy.form]);
     } catch (e) {
       throw e;
     }
@@ -76,6 +76,12 @@ export default class Scriptix extends Component {
     let stateCopy = { ...this.state };
     stateCopy.form[field] = e.target.value;
     this.setState(stateCopy);
+  }
+
+  handleDelete = async record => {
+
+    let result = await API.del('/scriptix/delete/98798blah');
+    console.log('result: ', result);
   }
 
   render() {
@@ -111,6 +117,7 @@ export default class Scriptix extends Component {
                       <h4>{record.subject}</h4>
                       <h2>Verse {record.verse} | Page {record.page}</h2>
                       <p>{record.passage}</p>
+                      <Button type="danger" onClick={() => this.handleDelete(record)}>Delete</Button>
                     </Card>
                   </Col>
                 ))

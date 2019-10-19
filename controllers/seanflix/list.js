@@ -5,12 +5,20 @@ const dbName = require('../../config').dbName;
 module.exports = {
   async main(req, res) {
 
+    console.log('Calling seanflix list');
+    
+    let error;
     let client = new MongoClient(url, { useNewUrlParser: true });
 
     try {
       client = await client.connect();
     } catch (e) {
-      throw e;
+      error = e;
+      error.message = 'There was an error connecting to the database.';
+    }
+
+    if(error) {
+      res.send({ body: error });
     }
 
     const db = client.db(dbName);
@@ -21,11 +29,16 @@ module.exports = {
     try {
       data = await collection.find({}).toArray();
     } catch (e) {
-      throw e;
+      error = e;
+      error.message = 'There was an error finding the seanflix records.';
     }
-
+    
     client.close();
 
-    res.send({ body: data });
+    if(error) {
+      res.send({body: error});
+    }
+    
+    res.send({body: data});
   }
 }
