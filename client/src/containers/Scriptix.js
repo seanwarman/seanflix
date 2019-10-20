@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import API from '../libs/ixApi';
 import { message, Button, Input, Col, Card } from 'antd';
+import JsonFormFill from "../components/json/JsonFormFill";
 
 let id = 0;
 
@@ -78,9 +79,12 @@ export default class Scriptix extends Component {
   }
 
   handleDelete = async record => {
-
     let result = await API.del('/scriptix/delete/98798blah');
     console.log('result: ', result);
+  }
+
+  handleSave = async state => {
+    console.log('state: ', state);
   }
 
   render() {
@@ -89,7 +93,7 @@ export default class Scriptix extends Component {
           <h1 style={{ color: '#c53942', textAlign: 'center' }}>SCRIPTIX</h1>
           <Col style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Card style={{ width: '670px', marginBottom: '16px' }}>
-              <p style={{ margin: '1rem 0' }}>Book</p>
+              {/* <p style={{ margin: '1rem 0' }}>Book</p>
               <Input value={this.state.form.book} onChange={e => this.handleChange(e, 'book')} />
               <p style={{ margin: '1rem 0' }}>Subject</p>
               <Input value={this.state.form.subject} onChange={e => this.handleChange(e, 'subject')} />
@@ -103,7 +107,42 @@ export default class Scriptix extends Component {
               <Input.TextArea value={this.state.form.notes} onChange={e => this.handleChange(e, 'notes')} />
               <div style={{ textAlign: 'right', margin: '1rem 0' }}>
                 <Button disabled={this.validateForm()} loading={this.state.saving} style={{ margin: 0 }} onClick={this.handleSubmit}>Save</Button>
-              </div>
+              </div> */}
+              <JsonFormFill
+                update={this.handleSave}
+                jsonForm={[
+                  {
+                    label: 'Book',
+                    type: 'input',
+                    required: true,
+                  },
+                  {
+                    label: 'Subject',
+                    type: 'input',
+                    required: true,
+                  },
+                  {
+                    label: 'Verse',
+                    type: 'input',
+                    required: true,
+                  },
+                  {
+                    label: 'Page',
+                    type: 'input',
+                    required: true,
+                  },
+                  {
+                    label: 'Passage',
+                    type: 'textarea',
+                    required: true,
+                  },
+                  {
+                    label: 'Notes',
+                    type: 'input',
+                    required: true,
+                  }
+                ]}
+              />
             </Card>
           </Col>
           <div>

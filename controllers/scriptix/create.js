@@ -6,7 +6,18 @@ const uuid = require('uuid');
 module.exports = {
   async main(req, res) {
 
+    // check here if the data is our jsonForm, which is the only one
+    // we should accept.
+    const data = req.body.data;
+
+    // This is a temporary fix...
+    if(typeof data.jsonForm !== 'object') {
+      console.log('All scriptix records must be in jsonForm format, this is what was sent: ', data);
+      return res.status(403).send();
+    }
+    
     let error;
+    let result;
     let client = new MongoClient(url, { useNewUrlParser: true });
 
     try {
@@ -17,14 +28,13 @@ module.exports = {
     }
     
     if(error) {
-      res.status(500).send();
+      return res.status(500).send();
     }
 
     const db = client.db(dbName);
     const collection = db.collection('scriptix');
 
-    let result;
-    const data = req.body.data;
+    data.id = uuid.v1();
 
     try {
       result = await collection.insertOne(data);
@@ -36,10 +46,10 @@ module.exports = {
     client.close();
 
     if(error) {
-      res.status(500).send();
+      return res.status(500).send();
     }
     
-    res.send({body: result});
+    return res.send({body: result});
 
   }
 }
