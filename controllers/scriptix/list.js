@@ -6,7 +6,8 @@ module.exports = {
   async main(req, res) {
     
     let error;
-    let client = new MongoClient(url, { useNewUrlParser: true });
+    let result;
+    let client = new MongoClient(url, {useNewUrlParser: true});
 
     try {
       client = await client.connect();
@@ -16,16 +17,13 @@ module.exports = {
     }
     
     if(error) {
-      res.send({body: error});
+      return res.status(500).send();
     }
 
     const db = client.db(dbName);
-    
-    const collection = db.collection('scriptix');
-    let docs;
 
     try {
-      docs = await collection.find({}).toArray();
+      result = await db.collection('scriptix').find({}).toArray();
     } catch (e) {
       console.log('There was an error finding the scriptix collection: ', e);
       error = e;
@@ -34,10 +32,11 @@ module.exports = {
     client.close();
     
     if(error) {
-      res.send({body: error});
+      console.log('There was an error finding the scriptix records.');
+      return res.status(500).send();
     }
     
-    res.send({ body: docs });
+    return res.send({body: result});
   }
 }
 
