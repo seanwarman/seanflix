@@ -36,7 +36,6 @@ export default class Seanflix extends Component {
 
   getInfo = async(movies) => {
     let result;
-    let error;
     try {
       result = await API.create('/seanflix/wiki/info', this.prettifyFileName(movies[0]));
     } catch (err) {
@@ -122,13 +121,13 @@ export default class Seanflix extends Component {
       padding: '25px'
     };
 
-    const iconStyles = {
-      opacity: 1,
-      transition: 'all 1s',
-      fontSize: '3rem',
-      color:  '#e8e8e8',
-      position: 'absolute'
-    }
+    // const iconStyles = {
+    //   opacity: 1,
+    //   transition: 'all 1s',
+    //   fontSize: '3rem',
+    //   color:  '#e8e8e8',
+    //   position: 'absolute'
+    // }
 
     return (
       <div 

@@ -1,40 +1,49 @@
 const MongoClient = require('mongodb').MongoClient;
-const ObjectId = require('mongodb').ObjectId; 
+const ObjectId = require('mongodb').ObjectId;
 const url = require('../../config').url;
 const dbName = require('../../config').dbName;
 
 module.exports = {
   async main(req, res) {
 
-    console.log('params: ', req.params);
-    res.send({ body: {message: 'There was an error doing such and such'}})
+    if(!req.params.id) {
+      console.log('No id found in the url to delete by.');
+      return res.status(403).send();
+    }
 
-    // let error;
+    let error;
+    const data = {
+      _id: ObjectId(req.params.id)
+    }
 
-    // let client = new MongoClient(url, { useNewUrlParser: true });
+    let client = new MongoClient(url, { useNewUrlParser: true });
 
-    // try {
-    //   client = await client.connect();
-    // } catch (e) {
-    //   res.send({ body: e });
-    // }
+    try {
+      client = await client.connect();
+    } catch (e) {
+      console.log('There was an error connecting to the database: ', e);
+      error = e;
+    }
+    
+    if(error) {
+      return res.status(500).send();
+    }
 
-    // const db = client.db(dbName);
-    // const collection = db.collection('scriptix');
+    const db = client.db(dbName);
 
-    // let result;
+    try {
+      result = await db.collection('scriptix').deleteOne(data);
+    } catch (e) {
+      console.log('There was an error inserting to the database: ', e);
+      error = e;
+    }
+    
+    client.close();
 
-    // // try {
-    // //   result = await collection.deleteOne({ id: })
-    // // } catch (e) {
-    // //   error = e;
-    // // }
-
-    // client.close();
-
-    // if(error) {
-    //   res.send({ body: error })
-    // }
-    // res.send({ body: result });
+    if(error) {
+      return res.status(500).send();
+    }
+    
+    return res.send({body: result});
   }
 }

@@ -69,6 +69,8 @@ export default class JsonFormFill extends Component {
       (typeof item.value === 'string' && item.value.length < 1)
       ||
       (typeof item.value === 'object' && item.value === null)
+      ||
+      (!item.value)
     ))) {
       valid = false;
     }

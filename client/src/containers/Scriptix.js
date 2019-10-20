@@ -1,53 +1,36 @@
 import React, { Component } from "react";
 import API from '../libs/ixApi';
-import { message, Button, Input, Col, Card } from 'antd';
-import JsonFormFill from "../components/json/JsonFormFill";
+import { message, Button, Col, Card, Popconfirm } from 'antd';
+import JsonFormFill from '../components/json/JsonFormFill';
+import JsonFormView from '../components/json/JsonFormView';
 
 let id = 0;
 
 export default class Scriptix extends Component {
   state = {
-    inputField: null,
-    form: {
-      subject: null,
-      verse: null,
-      book: null,
-      page: null,
-      passage: null,
-      notes: null
-    },
-    drawerVisible: false,
-    scriptix: null
+    scriptix: null,
+    saving: false,
+    deleting: [],
   }
 
-  componentDidMount = async() => {
-    await this.loadDataAndSetState();
+  componentDidMount = () => {
+    this.loadDataAndSetState();
   }
 
   loadDataAndSetState = async() => {
     let stateCopy = { ...this.state };
     let records;
-    let error;
-    try {
-      records = await API.get('/scriptix/list');
-    } catch (err) {
-      console.log('There was an error getting the scriptix endpoint: ', err);
-      error = err;
+    records = await API.get('/scriptix/list');
+    if(!records) {
+      message.error('This page is currently unusable.');
+      return;
     }
-    if(error) return 'failed';
+    stateCopy.deleting = records.map(record => false);
     stateCopy.scriptix = records;
     stateCopy.saving = false;
-    stateCopy.form = {
-      subject: null,
-      verse: null,
-      book: null,
-      page: null,
-      passage: null,
-      notes: null
-    }
     this.setState(stateCopy);
-    return 'success';
   }
+
   handleSubmit = async() => {
     this.setState({ saving: true });
     let stateCopy = { ...this.state };
@@ -61,105 +44,100 @@ export default class Scriptix extends Component {
     this.loadDataAndSetState();
   }
 
-  validateForm = () => {
-    let stateCopy = { ...this.state };
-    let disabled = false;
-    // for (let key in stateCopy.form) {
-    //   if((stateCopy.form[key] || '').length < 1) {
-    //     disabled = true;
-    //   }
-    // }
-    return disabled;
+  handleDelete = async (record, i) => {
+    let {deleting} = this.state;
+    deleting[i] = true;
+    this.setState({deleting});
+    await API.del('/scriptix/delete/' + record._id);
+    this.loadDataAndSetState();
   }
 
-  handleChange = (e, field) => {
-    let stateCopy = { ...this.state };
-    stateCopy.form[field] = e.target.value;
-    this.setState(stateCopy);
-  }
-
-  handleDelete = async record => {
-    let result = await API.del('/scriptix/delete/98798blah');
-    console.log('result: ', result);
-  }
-
-  handleSave = async state => {
-    console.log('state: ', state);
+  handleSave = async componentState => {
+    this.setState({ saving: true });
+    let result;
+    result = await API.create('/scriptix/create', {jsonForm: componentState.jsonForm});
+    if(!result) {
+      message.error('The passage failed to save');
+    } else {
+      message.success('Passage Saved');
+      console.log('result: ', result);
+    }
+    this.loadDataAndSetState();
   }
 
   render() {
     return (
       <div>
-          <h1 style={{ color: '#c53942', textAlign: 'center' }}>SCRIPTIX</h1>
-          <Col style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Card style={{ width: '670px', marginBottom: '16px' }}>
-              {/* <p style={{ margin: '1rem 0' }}>Book</p>
-              <Input value={this.state.form.book} onChange={e => this.handleChange(e, 'book')} />
-              <p style={{ margin: '1rem 0' }}>Subject</p>
-              <Input value={this.state.form.subject} onChange={e => this.handleChange(e, 'subject')} />
-              <p style={{ margin: '1rem 0' }}>Verse</p>
-              <Input value={this.state.form.verse} onChange={e => this.handleChange(e, 'verse')} />
-              <p style={{ margin: '1rem 0' }}>Page</p>
-              <Input value={this.state.form.page} onChange={e => this.handleChange(e, 'page')} />
-              <p style={{ margin: '1rem 0' }}>Passage</p>
-              <Input.TextArea value={this.state.form.passage} onChange={e => this.handleChange(e, 'passage')} />
-              <p style={{ margin: '1rem 0' }}>Notes</p>
-              <Input.TextArea value={this.state.form.notes} onChange={e => this.handleChange(e, 'notes')} />
-              <div style={{ textAlign: 'right', margin: '1rem 0' }}>
-                <Button disabled={this.validateForm()} loading={this.state.saving} style={{ margin: 0 }} onClick={this.handleSubmit}>Save</Button>
-              </div> */}
-              <JsonFormFill
-                update={this.handleSave}
-                jsonForm={[
-                  {
-                    label: 'Book',
-                    type: 'input',
-                    required: true,
-                  },
-                  {
-                    label: 'Subject',
-                    type: 'input',
-                    required: true,
-                  },
-                  {
-                    label: 'Verse',
-                    type: 'input',
-                    required: true,
-                  },
-                  {
-                    label: 'Page',
-                    type: 'input',
-                    required: true,
-                  },
-                  {
-                    label: 'Passage',
-                    type: 'textarea',
-                    required: true,
-                  },
-                  {
-                    label: 'Notes',
-                    type: 'input',
-                    required: true,
-                  }
-                ]}
-              />
-            </Card>
-          </Col>
-          <div>
-            {
-              this.state.scriptix &&
-                this.state.scriptix.map( record => (
-                  <Col key={id++} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <Card style={{ width: '670px', marginBottom: '16px' }}>
-                      <h1>{record.book}</h1>
-                      <h4>{record.subject}</h4>
-                      <h2>Verse {record.verse} | Page {record.page}</h2>
-                      <p>{record.passage}</p>
-                      <Button type="danger" onClick={() => this.handleDelete(record)}>Delete</Button>
-                    </Card>
-                  </Col>
-                ))
-            }
+        <h1 style={{ color: '#c53942', textAlign: 'center' }}>SCRIPTIX</h1>
+        <Col style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Card style={{ width: '670px', marginBottom: '16px' }}>
+            <JsonFormFill
+              update={this.handleSave}
+              showLabels={false}
+              jsonForm={[
+                {
+                  label: 'Book',
+                  type: 'input',
+                  required: true,
+                },
+                {
+                  label: 'Subject',
+                  type: 'input',
+                  required: true,
+                },
+                {
+                  label: 'Verse',
+                  type: 'input',
+                  required: true,
+                },
+                {
+                  label: 'Page',
+                  type: 'input',
+                  required: true,
+                },
+                {
+                  label: 'Passage',
+                  type: 'textarea',
+                  required: true,
+                },
+                {
+                  label: 'Notes',
+                  type: 'input',
+                  required: true,
+                }
+              ]}
+            />
+          </Card>
+        </Col>
+        <div>
+          {
+            this.state.scriptix &&
+              this.state.scriptix.map( (record, i) => (
+                <Col key={id++} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <Card style={{ width: '670px', marginBottom: '16px' }}>
+                    {/* <h1>{record.book}</h1>
+                    <h4>{record.subject}</h4>
+                    <h2>Verse {record.verse} | Page {record.page}</h2>
+                    <p>{record.passage}</p> */}
+                    {
+                      record.jsonForm &&
+                      <JsonFormView 
+                        jsonForm={record.jsonForm}
+                        tags={['h1', 'h4', 'h2', 'h2', 'p']}
+                      />
+                    }
+                    <div style={{width: '100%', textAlign: 'right'}}>
+                      <Popconfirm
+                        title="Are you sure you want to delete this script?"
+                        onConfirm={() => this.handleDelete(record, i)}
+                      >
+                        <Button loading={this.state.deleting[i]} type="danger">Delete</Button>
+                      </Popconfirm>
+                    </div>
+                  </Card>
+                </Col>
+              ))
+          }
         </div>
       </div>
     )

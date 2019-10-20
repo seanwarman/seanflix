@@ -45,8 +45,6 @@ class App extends Component {
 
     result = await API.create('/seanflix/auth/check', key);
 
-    console.log('result: ', result);
-
     if(result.key) {
       return result.key;
     }

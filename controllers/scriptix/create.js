@@ -1,7 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 const url = require('../../config').url;
 const dbName = require('../../config').dbName;
-const uuid = require('uuid');
 
 module.exports = {
   async main(req, res) {
@@ -11,7 +10,7 @@ module.exports = {
     const data = req.body.data;
 
     // This is a temporary fix...
-    if(typeof data.jsonForm !== 'object') {
+    if(typeof (data || {}).jsonForm !== 'object') {
       console.log('All scriptix records must be in jsonForm format, this is what was sent: ', data);
       return res.status(403).send();
     }
@@ -32,12 +31,9 @@ module.exports = {
     }
 
     const db = client.db(dbName);
-    const collection = db.collection('scriptix');
-
-    data.id = uuid.v1();
 
     try {
-      result = await collection.insertOne(data);
+      result = await db.collection('scriptix').insertOne(data);
     } catch (e) {
       console.log('There was an error inserting to the database: ', e);
       error = e;
