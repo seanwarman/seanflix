@@ -18,7 +18,7 @@ const wikiImages = require('./controllers/wikiImages').main;         app.post('/
 const scriptixCreate = require('./controllers/scriptix/create').main;        app.post('/ix/scriptix/create', scriptixCreate);
 const scriptixList = require('./controllers/scriptix/list').main;            app.get('/ix/scriptix/list', scriptixList);
 const scriptixDel = require('./controllers/scriptix/delete').main;           app.delete('/ix/scriptix/delete/:id', scriptixDel);
-// const scriptixUpdate = require('./controllers/scriptix/update').main;        app.put('/ix/scriptix/update/:id', scriptixUpdate);
+const scriptixUpdate = require('./controllers/scriptix/update').main;        app.put('/ix/scriptix/update/:id', scriptixUpdate);
 
 const seanflixCreate = require('./controllers/seanflix/create').main;        app.post('/ix/seanflix/create', seanflixCreate);
 const seanflixList = require('./controllers/seanflix/list').main;            app.get('/ix/seanflix/list', seanflixList);

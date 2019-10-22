@@ -84,6 +84,12 @@ export default class JsonFormFill extends Component {
     this.setState(stateCopy);
   }
 
+  update = async() => {
+    this.setState({saving: true, saved: true});
+    await this.props.update(this.state);
+    this.loadDataAndSetState();
+  }
+
   // █▀▄▀█ █░░█ █░░ ▀▀█▀▀ ░▀░
   // █░▀░█ █░░█ █░░ ░░█░░ ▀█▀
   // ▀░░░▀ ░▀▀▀ ▀▀▀ ░░▀░░ ▀▀▀
@@ -222,12 +228,6 @@ export default class JsonFormFill extends Component {
       ></Input>
     </Form.Item>
   )
-
-  update = async() => {
-    this.setState({saving: true, saved: true});
-    await this.props.update(this.state);
-    this.loadDataAndSetState();
-  }
 
   // █▀▀█ █▀▀ █▀▀▄ █▀▀▄ █▀▀ █▀▀█ █▀▀
   // █▄▄▀ █▀▀ █░░█ █░░█ █▀▀ █▄▄▀ ▀▀█

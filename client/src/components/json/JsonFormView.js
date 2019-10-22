@@ -22,7 +22,7 @@ export default class JsonFormView extends Component {
     }
   }
   
-  renderUneditableBrief = jsonForm => {
+  renderUneditableForm = jsonForm => {
     const {showLabels} = this.props;
     const uneditableTextareaStyles = {
       // background: '#ffffff',
@@ -85,6 +85,6 @@ export default class JsonFormView extends Component {
   }
   render() {
     const {jsonForm} = this.props;
-    return this.renderUneditableBrief(jsonForm);
+    return this.renderUneditableForm(jsonForm);
   }
 }

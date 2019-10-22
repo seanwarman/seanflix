@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import API from '../libs/ixApi';
-import { message, Button, Col, Card, Popconfirm } from 'antd';
+import { message, Button, Col, Card, Popconfirm, Icon } from 'antd';
 import JsonFormFill from '../components/json/JsonFormFill';
 import JsonFormView from '../components/json/JsonFormView';
 
@@ -8,9 +8,11 @@ let id = 0;
 
 export default class Scriptix extends Component {
   state = {
-    scriptix: null,
+    scriptix: [],
     saving: false,
     deleting: [],
+    editing: [],
+    updating: [],
   }
 
   componentDidMount = () => {
@@ -26,6 +28,8 @@ export default class Scriptix extends Component {
       return;
     }
     stateCopy.deleting = records.map(record => false);
+    stateCopy.editing = records.map(record => false);
+    stateCopy.updating = records.map(record => false);
     stateCopy.scriptix = records;
     stateCopy.saving = false;
     this.setState(stateCopy);
@@ -52,6 +56,21 @@ export default class Scriptix extends Component {
     this.loadDataAndSetState();
   }
 
+  handleUpdate = async (componentState, i) => {
+    let {updating, scriptix} = this.state;
+    updating[i] = true;
+    this.setState({updating});
+    let result = await API.update('/scriptix/update/' + scriptix[i]._id, {
+      jsonForm: componentState.jsonForm
+    });
+    if(!result) {
+      message.error('The passage failed to save');
+    } else {
+      message.success('Passage Saved');
+    }
+    this.loadDataAndSetState();
+  }
+
   handleSave = async componentState => {
     this.setState({ saving: true });
     let result;
@@ -60,7 +79,6 @@ export default class Scriptix extends Component {
       message.error('The passage failed to save');
     } else {
       message.success('Passage Saved');
-      console.log('result: ', result);
     }
     this.loadDataAndSetState();
   }
@@ -71,9 +89,11 @@ export default class Scriptix extends Component {
         <h1 style={{ color: '#c53942', textAlign: 'center' }}>SCRIPTIX</h1>
         <Col style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Card style={{ width: '670px', marginBottom: '16px' }}>
+            <div>
+            </div>
             <JsonFormFill
               update={this.handleSave}
-              showLabels={false}
+              // showLabels={false}
               jsonForm={[
                 {
                   label: 'Book',
@@ -115,12 +135,26 @@ export default class Scriptix extends Component {
               this.state.scriptix.map( (record, i) => (
                 <Col key={id++} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <Card style={{ width: '670px', marginBottom: '16px' }}>
-                    {/* <h1>{record.book}</h1>
-                    <h4>{record.subject}</h4>
-                    <h2>Verse {record.verse} | Page {record.page}</h2>
-                    <p>{record.passage}</p> */}
+                    <div
+                      style={{width: '100%', textAlign: 'right'}}
+                    >
+                      <Icon 
+                        type="edit" 
+                        onClick={() => {
+                          let editing = this.state.editing;
+                          editing[i] = !editing[i];
+                          this.setState({editing});
+                        }}
+                      />
+                    </div>
                     {
                       record.jsonForm &&
+                      this.state.editing[i] ?
+                      <JsonFormFill
+                        jsonForm={record.jsonForm}
+                        update={state => this.handleUpdate(state, i)}
+                      />
+                      :
                       <JsonFormView 
                         jsonForm={record.jsonForm}
                         tags={['h1', 'h4', 'h2', 'h2', 'p']}
