@@ -156,7 +156,13 @@ export default class Scriptix extends Component {
                       />
                       :
                       <JsonFormView 
-                        jsonForm={record.jsonForm}
+                        jsonForm={record.jsonForm.reduce((arr,json) => {
+                          if(json.label === 'Notes') {
+                            return arr;
+                          } else {
+                            return arr.concat(json);
+                          }
+                        },[])}
                         tags={['h1', 'h4', 'h2', 'h2', 'p']}
                       />
                     }

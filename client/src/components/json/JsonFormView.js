@@ -49,9 +49,17 @@ export default class JsonFormView extends Component {
                 :
                 item.type === 'textarea' ?
                   <Col key={key++} span={24}>
-                    <Tag>
-                      <b>{showLabels && item.label + ': '}</b> <textarea className="formjson-textarea" span={24} disabled style={uneditableTextareaStyles} value={item.value} />
-                    </Tag>
+                    <div>
+                      <b>{showLabels && item.label + ': '}</b> 
+                      <Tag
+                        className="formjson-textarea" 
+                        span={24}
+                        disabled 
+                        style={uneditableTextareaStyles} 
+                        >
+                        {item.value} 
+                      </Tag>
+                    </div>
                   </Col>
                   :
                   item.type === 'dropdown' ?
@@ -64,10 +72,18 @@ export default class JsonFormView extends Component {
                     item.type === 'multi' ?
                       item.children.map((child, childIndex) => (
                         (child[0].value || '').length > 0 && (child[1].value || '').length > 0 &&
-                        <Tag key={childIndex} id="multi-wrapper">
+                        <div key={childIndex} id="multi-wrapper">
                           <b>{showLabels && child[0].label + ': '}</b> {child[0].value}
-                          <b>{showLabels && child[1].label + ': '}</b> <textarea span={24} className="formjson-textarea" disabled style={uneditableTextareaStyles} value={child[1].value} />
-                        </Tag>
+                          <b>{showLabels && child[1].label + ': '}</b> 
+                          <Tag 
+                            span={24} 
+                            className="formjson-textarea" 
+                            disabled 
+                            style={uneditableTextareaStyles} 
+                          >
+                            {child[1].value} 
+                          </Tag>
+                        </div>
                       ))
                       :
                       <Col key={key++} span={24}>
